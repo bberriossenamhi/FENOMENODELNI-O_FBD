@@ -1,0 +1,1655 @@
+<!doctype html>
+<html lang="es" data-visualize-standalone>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>El Pacífico en movimiento | El Niño y La Niña en 3D</title>
+<style>:root {
+  color-scheme: light dark;
+  background-color: var(
+    --background,
+    var(--color-background-primary, light-dark(rgb(255 255 255), rgb(24 24 24)))
+  ) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: var(
+    --color-background-primary,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --card: color-mix(in oklab, var(--foreground) 5%, var(--background));
+  --card-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --popover: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255), rgb(45 45 45))
+  );
+  --popover-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --primary: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --primary-foreground: var(
+    --color-text-inverse,
+    light-dark(rgb(255 255 255), rgb(13 13 13))
+  );
+  --secondary: var(
+    --color-background-secondary,
+    light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%))
+  );
+  --secondary-foreground: var(
+    --color-text-primary,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: var(
+    --color-text-secondary,
+    light-dark(rgb(26 28 31 / 49.4%), rgb(255 255 255 / 49.8%))
+  );
+  --accent: var(
+    --color-background-info,
+    light-dark(rgb(229 242 255), rgb(13 39 63))
+  );
+  --accent-foreground: var(
+    --color-text-info,
+    light-dark(rgb(51 156 255), rgb(131 195 255))
+  );
+  --destructive: var(
+    --color-text-warning,
+    light-dark(rgb(226 85 7), rgb(255 133 73))
+  );
+  --border: var(
+    --color-border-secondary,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+  --input: var(
+    --color-border-primary,
+    light-dark(
+      rgb(26 28 31 / 11.8%),
+      color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+    )
+  );
+  --ring: var(
+    --color-ring-primary,
+    light-dark(rgb(51 156 255), rgb(131 195 255 / 76%))
+  );
+  --font-size-base: var(--font-text-md-size, 14px);
+  --blue: light-dark(rgb(51 156 255), rgb(51 156 255));
+  --orange: light-dark(rgb(226 85 7), rgb(251 106 34));
+  --green: light-dark(rgb(0 162 64), rgb(64 201 119));
+  --red: light-dark(rgb(224 46 42), rgb(255 103 100));
+  --purple: light-dark(rgb(146 79 247), rgb(173 123 249));
+  --yellow: light-dark(rgb(255 195 0), rgb(255 210 64));
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, "Segoe UI", sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono",
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --icon-size: 16px;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --corner-shape: round;
+  --radius: var(--border-radius-lg, 10px);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 17 17'%3E%3Cpath d='M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z'/%3E%3C/svg%3E");
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html > body {
+  /* Preserve MCP aliases for older inline renderers without creating :root cycles. */
+  --color-background-primary: var(
+    --background,
+    light-dark(rgb(255 255 255), rgb(24 24 24))
+  );
+  --color-text-primary: var(
+    --foreground,
+    light-dark(rgb(26 28 31), rgb(255 255 255))
+  );
+  --color-border-secondary: var(
+    --border,
+    light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%))
+  );
+
+  margin: 0;
+  padding: var(--visualize-paint-gutter, 0px);
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans) !important;
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--font-weight-medium, 500);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive > .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align="right"]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align="center"]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: var(--corner-shape);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget > :not(.card, .progress) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+hr {
+  width: 100%;
+  height: 1px;
+  margin-block: 6px;
+  border: 0;
+  background: var(--border);
+}
+
+.nav {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: 4px;
+}
+
+.progress {
+  display: flex;
+  height: 8px;
+  margin-block: calc((var(--line-height-normal, 1.5em) - 8px) / 2);
+  overflow: hidden;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+}
+
+.progress-bar:only-child {
+  border-radius: var(--radius-full);
+}
+
+.progress-bar {
+  height: 100%;
+  flex-shrink: 0;
+  border: 0;
+  background: var(--viz-series-1);
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls > .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls > .form-label > :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.nav-link,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn,
+.nav-link {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover,
+.nav-link:not(:disabled):not([aria-disabled="true"]):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.nav-pills .nav-link {
+  min-width: 0;
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.nav-justified .nav-link {
+  flex: 1 1 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+.nav-pills .nav-link.active {
+  color: var(--foreground);
+  background: var(--muted);
+}
+
+.btn:disabled,
+.nav-link:disabled,
+.nav-link[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type="file"] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type="file"]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type="file"]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type="color"] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type="color"]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: var(--corner-shape);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: var(--corner-shape);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: var(--corner-shape);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type="checkbox"]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type="checkbox"]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: "";
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type="radio"] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type="radio"]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: "";
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+  [aria-pressed="true"],
+  [aria-selected="true"],
+  .is-selected
+) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed="true"], [aria-selected="true"], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible,
+.nav-link:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+@media (pointer: coarse) {
+  .btn,
+  .nav-link,
+  .form-control,
+  .form-select {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  /* Keep small-screen WebKit from zooming when a text field receives focus. */
+  .form-control,
+  .form-select {
+    font-size: max(16px, var(--font-size-normal));
+  }
+
+  .form-control[type="file"]::file-selector-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .form-control-color[type="color"] {
+    width: 44px;
+    height: 44px;
+  }
+
+  .form-control:is(
+    [type="date"],
+    [type="datetime-local"],
+    [type="month"],
+    [type="time"],
+    [type="week"]
+  ) {
+    min-width: 0;
+    max-width: 100%;
+    padding-block: 8px;
+  }
+
+  .form-check {
+    min-height: 44px;
+    padding-inline: 15px;
+  }
+
+  .form-check-input {
+    position: relative;
+  }
+
+  .form-check-input::after {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 44px;
+    height: 44px;
+    content: "";
+    transform: translate(-50%, -50%);
+  }
+
+  .form-check-label {
+    display: inline-flex;
+    min-width: 44px;
+    min-height: 44px;
+    align-items: center;
+  }
+
+  .form-range {
+    height: 44px;
+    touch-action: pan-y;
+  }
+
+  .form-range::-webkit-slider-runnable-track {
+    height: 44px;
+  }
+
+  .form-range::-moz-range-track {
+    height: 44px;
+  }
+
+  .form-range::-webkit-slider-thumb {
+    margin-top: 12px;
+  }
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget > svg {
+  width: 100%;
+}
+
+/* Model-authored chart rules can otherwise stretch icons after these styles load. */
+svg.lucide {
+  display: block;
+  width: var(--icon-size) !important;
+  height: var(--icon-size) !important;
+  flex: none;
+  margin: 0 !important;
+  stroke-width: 1.6;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html>body{padding:0}</style>
+<meta name="description" content="Maqueta educativa 3D e interactiva sobre El Niño, La Niña y el océano Pacífico. Con controles de cámara, animaciones y explicaciones en español.">
+<style>
+html > body { padding: clamp(14px, 3vw, 36px); }
+#enso-studio { max-width: 1100px; margin-inline: auto; }
+</style>
+</head>
+<body>
+<div id="enso-studio">
+  <style>
+    #enso-studio{color:var(--foreground);width:100%}
+    #enso-studio .heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+    #enso-studio .heading h2{margin:0}
+    #enso-studio .scene{position:relative;width:100%;height:480px;overflow:hidden;touch-action:none;cursor:grab;margin:8px 0}
+    #enso-studio .scene:active{cursor:grabbing}
+    #enso-studio .scene canvas{width:100%;height:100%;display:block}
+    #enso-studio .scene .tag{position:absolute;transform:translate(-50%,-50%);pointer-events:none;color:var(--foreground);background:var(--background);padding:3px 7px;white-space:nowrap}
+    #enso-studio .scene .waiting{position:absolute;inset:42% 15px auto;text-align:center}
+    #enso-studio .legend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:10px 0 16px}
+    #enso-studio .key{display:inline-block;width:18px;height:9px;margin-right:6px}
+    #enso-studio .steps{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 10px}
+    #enso-studio .explain{min-height:70px;margin:8px 0}
+    #enso-studio .explain strong{font-weight:500}
+    #enso-studio .source{margin-top:12px}
+    #enso-studio .foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-top:12px}
+    #enso-studio[data-expanded="true"] .scene{height:680px}
+    @media(max-width:460px){#enso-studio .scene{height:385px}#enso-studio[data-expanded="true"] .scene{height:510px}}
+  </style>
+  <div class="heading"><h2>El Pacífico en movimiento</h2><span class="text-small text-muted">El Niño · La Niña · Maqueta 3D</span></div>
+  <div class="viz-controls" role="group" aria-label="Escenario climático">
+    <button type="button" class="btn" data-phase="normal" aria-pressed="true">Condición normal</button>
+    <button type="button" class="btn" data-phase="nino" aria-pressed="false">El Niño</button>
+    <button type="button" class="btn" data-phase="nina" aria-pressed="false">La Niña</button>
+  </div>
+  <div class="scene" role="img" aria-label="Escena 3D del Pacífico: costas esquemáticas, superficie ondulada, corte de aguas cálidas y frías, vientos y nubes. Controles de cámara debajo.">
+    <div class="waiting" role="status">Preparando el océano 3D…</div>
+  </div>
+  <div class="viz-controls">
+    <button type="button" class="btn" data-action="motion" aria-pressed="false">Ver movimiento · 15 s</button>
+    <label class="form-label">Vista
+      <select class="form-select" data-view><option value="perspective">Perspectiva 3D</option><option value="cut">Corte del océano</option><option value="top">Desde arriba</option><option value="east">Costa sudamericana</option></select>
+    </label>
+    <button type="button" class="btn" data-action="expand" aria-pressed="false">Ampliar</button>
+  </div>
+  <div class="viz-controls" role="group" aria-label="Girar y acercar la maqueta">
+    <button type="button" class="btn btn-ghost" data-action="left" aria-label="Girar hacia la izquierda">↶ Girar</button>
+    <button type="button" class="btn btn-ghost" data-action="right" aria-label="Girar hacia la derecha">Girar ↷</button>
+    <button type="button" class="btn btn-ghost" data-action="in">＋ Acercar</button>
+    <button type="button" class="btn btn-ghost" data-action="out">− Alejar</button>
+  </div>
+  <div class="legend text-small"><span><i class="key" style="background:var(--orange)"></i>Agua cálida</span><span><i class="key" style="background:var(--blue)"></i>Agua fría</span><span>→ Vientos alisios</span><span>↑ Ascenso de agua fría</span></div>
+  <div class="steps" role="group" aria-label="Guía para explicar la maqueta">
+    <button type="button" class="btn" data-topic="wind" aria-pressed="true">1. Viento</button>
+    <button type="button" class="btn" data-topic="water" aria-pressed="false">2. Océano</button>
+    <button type="button" class="btn" data-topic="rain" aria-pressed="false">3. Lluvias</button>
+    <button type="button" class="btn" data-topic="peru" aria-pressed="false">4. Perú</button>
+  </div>
+  <div class="explain" aria-live="polite"><strong>El viento empuja el agua.</strong> En condiciones normales, los alisios soplan de Sudamérica hacia Asia y acumulan el agua cálida en el oeste.</div>
+  <div class="foot text-small text-muted"><span>Esquema educativo sin escala · Colores de temperatura, no del mar real.</span><span>Patrones generales; no es un pronóstico.</span></div>
+  <div class="source text-small">Fuentes: <a href="https://oceanservice.noaa.gov/facts/ninonina.html" target="_blank" rel="noopener">NOAA · El Niño y La Niña</a> · <a href="https://www.pmel.noaa.gov/elnino/what-is-el-nino" target="_blank" rel="noopener">NOAA · Océano y atmósfera</a> · <a href="https://www.minam.gob.pe/fenomenodelnino/el-nino-en-el-peru-y-sus-caracteristicas/" target="_blank" rel="noopener">MINAM · El Niño en Perú</a></div>
+  <script type="module">
+  (async()=>{
+    const root=document.getElementById('enso-studio'),host=root.querySelector('.scene');
+    const controls=[...root.querySelectorAll('button,select')];controls.forEach(e=>e.disabled=true);
+    try{
+      const T=await import('https://cdn.jsdelivr.net/npm/three@0.160.1/build/three.module.js');
+      const renderer=new T.WebGLRenderer({alpha:true,antialias:true,powerPreference:'high-performance'});
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setClearColor(0,0);
+      renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.3;
+      renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;
+      host.prepend(renderer.domElement);host.querySelector('.waiting').remove();
+      const scene=new T.Scene(),model=new T.Group();scene.add(model);
+      const camera=new T.PerspectiveCamera(36,1,.1,150);
+      const hemi=new T.HemisphereLight(0xffffff,0xffffff,1.8);scene.add(hemi);
+      const light=new T.DirectionalLight(0xffffff,3);light.position.set(-5,12,8);light.castShadow=true;
+      light.shadow.mapSize.set(1024,1024);Object.assign(light.shadow.camera,{left:-10,right:10,top:8,bottom:-8,near:.5,far:35});light.shadow.bias=-.001;light.shadow.normalBias=.04;scene.add(light);
+      const rim=new T.DirectionalLight(0xffffff,1.2);rim.position.set(6,4,-8);scene.add(rim);
+      const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+      const state={phase:'normal',topic:'wind',az:.33,el:.43,zoom:1,focus:new T.Vector3(0,-.1,0),time:0,playing:false,remaining:15,visible:true,frame:0,last:0,transition:null};
+      const phases={
+        normal:{l:-1.75,r:-.48,edge:1.0,cloud:-3.3,wind:1.9,up:1,windLabel:'Alisios habituales',rainLabel:'Lluvias en el oeste'},
+        nino:{l:-1.20,r:-1.03,edge:5.6,cloud:1.45,wind:.85,up:.34,windLabel:'Alisios débiles',rainLabel:'Lluvias hacia el este'},
+        nina:{l:-2.05,r:-.20,edge:-1.2,cloud:-4.15,wind:2.8,up:1.35,windLabel:'Alisios fuertes',rainLabel:'Lluvias hacia el oeste'}
+      };
+      const text={
+        normal:{wind:['El viento empuja el agua.','Los alisios soplan de Sudamérica hacia Asia y acumulan agua cálida al oeste.'],water:['El agua fría sube al este.','El afloramiento lleva agua profunda hacia la superficie. La termoclina, transición entre agua cálida y fría, queda más cerca de la superficie al este.'],rain:['El aire húmedo asciende.','Sobre el agua más cálida del oeste se favorecen las nubes y lluvias tropicales.'],peru:['El mar aporta nutrientes.','El agua que asciende frente a Perú lleva nutrientes que sostienen el plancton y la red alimentaria marina.']},
+        nino:{wind:['El empuje del viento disminuye.','Los alisios se debilitan y el agua cálida se extiende hacia el Pacífico central y oriental.'],water:['El este se calienta más de lo habitual.','La termoclina se hunde al este: llega menos agua fría rica en nutrientes a la superficie.'],rain:['La zona lluviosa se desplaza.','Las lluvias tropicales avanzan hacia el centro y el este; el oeste puede volverse más seco. Los efectos varían entre episodios.'],peru:['La costa peruana requiere su propio seguimiento.','El calentamiento costero puede favorecer lluvias intensas en el norte y afectar la pesca. El Niño costero y El Niño del Pacífico central pueden evolucionar de forma distinta.']},
+        nina:{wind:['El viento empuja con más fuerza.','Los alisios reforzados concentran más agua cálida cerca de Asia y Oceanía.'],water:['El este se enfría más de lo habitual.','Aumenta el ascenso de agua fría y la termoclina se acerca a la superficie en el Pacífico oriental.'],rain:['La lluvia se concentra al oeste.','La convección y las lluvias tropicales se desplazan hacia el oeste. La respuesta local depende de la región y la estación.'],peru:['No implica el mismo tiempo en todo Perú.','La Niña del Pacífico central no determina por sí sola las condiciones de la costa peruana; el ENFEN vigila también el océano costero.']}
+      };
+      let p={...phases.normal},palette={},waterSurface,warmSection,coldSection,thermoLine,cloudGroup,windArrows=[],upArrows=[],flowDots=[],rainPositions,rainLines,labels=[],pickable=[],materials=[];
+      const probe=document.createElement('span');probe.hidden=true;root.append(probe);
+      const sample=document.createElement('canvas');sample.width=sample.height=1;const ctx=sample.getContext('2d',{willReadFrequently:true});
+      function readColor(name){probe.style.color=`var(${name})`;ctx.clearRect(0,0,1,1);ctx.fillStyle=getComputedStyle(probe).color;ctx.fillRect(0,0,1,1);const rgb=ctx.getImageData(0,0,1,1).data;return new T.Color().setRGB(rgb[0]/255,rgb[1]/255,rgb[2]/255,T.SRGBColorSpace)}
+      function getPalette(){palette={blue:readColor('--blue'),warm:readColor('--orange'),green:readColor('--green'),fg:readColor('--foreground'),bg:readColor('--background'),muted:readColor('--muted'),yellow:readColor('--yellow')};}
+      function material(key,options={}){const m=new T.MeshStandardMaterial({color:palette[key],roughness:.72,...options});m.userData.key=key;materials.push(m);return m;}
+      function mesh(geo,mat,x,y,z,parent=model,topic=null){const obj=new T.Mesh(geo,mat);obj.position.set(x,y,z);obj.castShadow=true;obj.receiveShadow=true;parent.add(obj);if(topic){obj.userData.topic=topic;pickable.push(obj)}return obj;}
+      function sectionGeometry(){const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(new Float32Array(108),3));return g;}
+      function section(g,tl,tr,bl,br){
+        const v=[[-5,tl,-2.25],[5,tr,-2.25],[5,tr,2.25],[-5,tl,2.25],[-5,bl,-2.25],[5,br,-2.25],[5,br,2.25],[-5,bl,2.25]];
+        const ids=[0,2,1,0,3,2,4,5,6,4,6,7,3,7,6,3,6,2,0,1,5,0,5,4,0,4,7,0,7,3,1,2,6,1,6,5];
+        const a=g.attributes.position.array;ids.forEach((id,i)=>a.set(v[id],i*3));g.attributes.position.needsUpdate=true;g.computeVertexNormals();g.computeBoundingSphere();
+      }
+      function terrain(side){
+        const nx=20,nz=42,positions=[],colors=[],idx=[];
+        for(let iz=0;iz<=nz;iz++)for(let ix=0;ix<=nx;ix++){
+          const u=ix/nx,z=iz/nz*4.7-2.35;
+          const coast=5.02+.10*Math.sin(z*2.1)+.08*Math.cos(z*4.4);
+          const x=side*(coast+u*1.4);
+          const ridge=Math.exp(-Math.pow((u-.70)/.27,2));
+          const height=.08+u*.14+ridge*(.52+.40*Math.pow(Math.sin(z*2.3+.8),2)+.32*Math.pow(Math.sin(z*5.1),2));
+          positions.push(x,height,z);
+          const c=palette.green.clone().lerp(palette.warm,side===1?.24:.07).lerp(palette.muted,Math.max(0,height-.65)*.6);colors.push(c.r,c.g,c.b);
+        }
+        for(let iz=0;iz<nz;iz++)for(let ix=0;ix<nx;ix++){const a=iz*(nx+1)+ix,b=a+nx+1;idx.push(a,b,a+1,b,b+1,a+1)}
+        const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setIndex(idx);g.computeVertexNormals();
+        const m=new T.MeshStandardMaterial({vertexColors:true,roughness:.9,side:T.DoubleSide});materials.push(m);mesh(g,m,0,0,0,model,side===1?'peru':'rain');
+        mesh(new T.BoxGeometry(1.42,2.77,4.7),material('green',{roughness:1}),side*5.79,-1.4,0,model,side===1?'peru':'rain');
+        // Small plants provide depth cues on the schematic western terrain.
+        if(side===-1)for(let i=0;i<14;i++){
+          const z=-1.95+(i/13)*3.9,x=-5.37-.12*Math.sin(i*2.4);
+          mesh(new T.CylinderGeometry(.018,.027,.30,5),material('warm'),x,.22,z);
+          mesh(new T.ConeGeometry(.12,.34,7),material('green'),x,.49,z);
+        }
+      }
+      function tube(points,color,r=.016,parent=model){const c=new T.CatmullRomCurve3(points.map(v=>new T.Vector3(...v)));const m=mesh(new T.TubeGeometry(c,50,r,6,false),material(color,{roughness:.4}),0,0,0,parent);m.castShadow=false;return c;}
+      function makeLabel(key,pos,priority=1){const el=document.createElement('span');el.className='tag text-small';host.append(el);labels.push({key,el,pos:new T.Vector3(...pos),priority});}
+      function createScene(){
+        const geos=new Set(),mats=new Set();model.traverse(o=>{if(o.geometry)geos.add(o.geometry);if(o.material)mats.add(o.material)});model.clear();geos.forEach(g=>g.dispose());mats.forEach(m=>m.dispose());materials=[];labels.forEach(l=>l.el.remove());labels=[];pickable=[];windArrows=[];upArrows=[];flowDots=[];
+        getPalette();
+        const pedestal=mesh(new T.BoxGeometry(13.35,.32,5.15,1,1,1),material('muted',{metalness:.28,roughness:.38}),0,-2.96,0);
+        pedestal.castShadow=false;
+        const shadow=new T.Mesh(new T.PlaneGeometry(70,70),new T.ShadowMaterial({opacity:.12}));shadow.rotation.x=-Math.PI/2;shadow.position.y=-3.15;shadow.receiveShadow=true;model.add(shadow);
+        coldSection=mesh(sectionGeometry(),material('blue',{roughness:.45}),0,0,0,model,'water');
+        warmSection=mesh(sectionGeometry(),material('warm',{roughness:.45}),0,0,0,model,'water');
+        const surfaceGeo=new T.PlaneGeometry(10,4.5,120,54);surfaceGeo.rotateX(-Math.PI/2);
+        const surfaceMat=new T.ShaderMaterial({uniforms:{clock:{value:0},edge:{value:p.edge},cool:{value:palette.blue},hot:{value:palette.warm},foam:{value:palette.bg}},vertexShader:`
+          uniform float clock; varying vec3 wp; varying float wave;
+          void main(){vec3 p=position;wave=sin(p.x*3.3+p.z*2.1-clock*1.5)*.024+sin(p.x*5.8-p.z*3.7+clock*.8)*.014;p.y+=wave+.038;wp=p;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.);}`,
+          fragmentShader:`uniform float edge;uniform vec3 cool;uniform vec3 hot;uniform vec3 foam;varying vec3 wp;varying float wave;
+          void main(){float band=smoothstep(edge-1.6,edge+1.2,wp.x+.20*sin(wp.z*2.));vec3 c=mix(hot,cool,band);float ripple=pow(max(0.,sin(wp.x*3.3+wp.z*2.1+wave*32.)),18.);c=mix(c,foam,ripple*.20);gl_FragColor=vec4(c,1.);
+          #include <tonemapping_fragment>
+          #include <colorspace_fragment>
+          }`,side:T.DoubleSide});
+        waterSurface=mesh(surfaceGeo,surfaceMat,0,0,0,model,'water');waterSurface.castShadow=false;
+        terrain(-1);terrain(1);
+        const lineG=new T.BufferGeometry().setFromPoints([new T.Vector3(-5,p.l,2.27),new T.Vector3(5,p.r,2.27)]);
+        thermoLine=new T.Line(lineG,new T.LineBasicMaterial({color:palette.fg,transparent:true,opacity:.75}));model.add(thermoLine);
+        // Buoy: a scale cue for the ocean surface, not a measurement display.
+        mesh(new T.CylinderGeometry(.13,.18,.10,20),material('yellow'),3.1,.10,-1.3,model,'water');
+        mesh(new T.CylinderGeometry(.018,.018,.46,8),material('fg'),3.1,.35,-1.3);
+        mesh(new T.SphereGeometry(.04,10,8),material('yellow'),3.1,.60,-1.3);
+        for(let row=0;row<2;row++)for(let j=0;j<3;j++){
+          const arrow=new T.ArrowHelper(new T.Vector3(-1,0,0),new T.Vector3(4.35-j*3.1,1.55,-1.55+row*.78),p.wind,palette.fg,.30,.17);
+          model.add(arrow);windArrows.push(arrow);
+        }
+        // Cold-water paths in front of the cutaway remain readable without transparent-layer artifacts.
+        for(let i=0;i<3;i++){
+          const xx=3.4+i*.48;
+          const curve=tube([[xx-.8,-2.4,2.31],[xx,-1.9,2.31],[xx,-.8,2.31],[xx-.1,-.11,2.31]],'blue',.027);
+          const arrow=new T.ArrowHelper(new T.Vector3(0,1,0),new T.Vector3(xx-.1,-.52,2.33),.38,palette.blue,.19,.17);model.add(arrow);upArrows.push(arrow);
+          for(let j=0;j<5;j++){const dot=mesh(new T.SphereGeometry(.042,8,6),material('bg',{emissive:palette.blue,emissiveIntensity:.6}),0,0,0);dot.castShadow=false;flowDots.push({dot,curve,offset:j/5+i*.07,kind:'up'})}
+        }
+        // Surface flow marks point west in normal/La Niña states and indicate eastward warm-water redistribution in El Niño.
+        for(let row=0;row<2;row++){
+          const curve=tube([[-4.65,.10,.30+row*.85],[-2,.12,.40+row*.85],[1.1,.11,.32+row*.85],[4.55,.12,.42+row*.85]],'warm',.012);
+          for(let j=0;j<7;j++){const dot=mesh(new T.SphereGeometry(.046,8,6),material('bg',{emissive:palette.warm,emissiveIntensity:.6}),0,0,0);dot.castShadow=false;flowDots.push({dot,curve,offset:j/7,kind:'surface'})}
+        }
+        cloudGroup=new T.Group();model.add(cloudGroup);
+        const cloudMat=material('bg',{roughness:1});
+        for(let i=0;i<21;i++){
+          const xx=Math.sin(i*2.4)*.86,zz=Math.cos(i*1.7)*.55,yy=2.55+Math.sin(i*1.5)*.13+(i%3)*.13;
+          const c=mesh(new T.SphereGeometry(.32+(i%4)*.07,16,12),cloudMat,xx,yy,zz,cloudGroup,'rain');c.scale.set(1,.66,1);
+        }
+        rainPositions=new Float32Array(80*6);const rg=new T.BufferGeometry();rg.setAttribute('position',new T.BufferAttribute(rainPositions,3));
+        rainLines=new T.LineSegments(rg,new T.LineBasicMaterial({color:palette.blue,transparent:true,opacity:.60}));cloudGroup.add(rainLines);
+        makeLabel('west',[-5.55,.95,2.7],0);makeLabel('east',[5.65,.95,2.7],0);makeLabel('wind',[0,2.05,-1.6],1);makeLabel('rain',[p.cloud,3.35,0],1);makeLabel('thermo',[-1.9,-1.75,2.4],2);
+        applyState();resize();
+      }
+      function applyState(){
+        section(coldSection.geometry,p.l,p.r,-2.78,-2.78);section(warmSection.geometry,0,0,p.l,p.r);
+        waterSurface.material.uniforms.edge.value=p.edge;
+        const a=thermoLine.geometry.attributes.position;a.setXYZ(0,-5,p.l,2.27);a.setXYZ(1,5,p.r,2.27);a.needsUpdate=true;thermoLine.geometry.computeBoundingSphere();
+        cloudGroup.position.x=p.cloud;
+        windArrows.forEach(a=>a.setLength(p.wind,.28,.16));
+        upArrows.forEach(a=>a.setLength(.18+p.up*.20,.14,.13));
+        labels.find(l=>l.key==='rain').pos.x=p.cloud;
+        const tp=labels.find(l=>l.key==='thermo');tp.pos.y=p.l+(p.r-p.l)*.31-.20;
+        updateMotion();
+      }
+      function updateMotion(){
+        waterSurface.material.uniforms.clock.value=state.time;
+        flowDots.forEach(({dot,curve,offset,kind})=>{
+          const speed=kind==='up'?.13*p.up:.05*(state.phase==='nino'?1:p.wind);
+          let t=(state.time*speed+offset)%1;if(kind==='surface'&&state.phase!=='nino')t=1-t;
+          dot.position.copy(curve.getPoint(t));dot.visible=kind!=='up'||offset<.35+p.up*.5;
+        });
+        for(let i=0;i<80;i++){
+          const xx=Math.sin(i*17.13)*.97,zz=Math.cos(i*11.17)*.63;
+          const y=2.28-((state.time*.95+i*.073)%2.05);
+          rainPositions.set([xx,y,zz,xx-.018,y-.12,zz],i*6);
+        }
+        rainLines.geometry.attributes.position.needsUpdate=true;rainLines.geometry.computeBoundingSphere();
+      }
+      function explain(){
+        const [title,body]=text[state.phase][state.topic],el=root.querySelector('.explain');el.replaceChildren();const strong=document.createElement('strong');strong.textContent=title+' ';el.append(strong,document.createTextNode(body));
+        root.querySelectorAll('[data-topic]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.topic===state.topic)));
+      }
+      function render(){
+        const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;
+        const base=Math.max(19,24.5/camera.aspect),dist=base/state.zoom;
+        camera.position.set(state.focus.x+Math.sin(state.az)*Math.cos(state.el)*dist,state.focus.y+Math.sin(state.el)*dist,state.focus.z+Math.cos(state.az)*Math.cos(state.el)*dist);
+        camera.lookAt(state.focus);camera.updateMatrixWorld();renderer.render(scene,camera);
+        const boxes=[];
+        labels.sort((a,b)=>a.priority-b.priority).forEach(l=>{
+          const values={west:w<450?'Oeste · Asia':'Oeste · Asia y Oceanía',east:w<450?'Este · Perú':'Este · Perú y Ecuador',wind:phases[state.phase].windLabel,rain:phases[state.phase].rainLabel,thermo:'Termoclina'};
+          l.el.textContent=values[l.key];const v=l.pos.clone().project(camera);const ew=l.el.offsetWidth,eh=l.el.offsetHeight;
+          let x=Math.max(ew/2+4,Math.min(w-ew/2-4,(v.x+1)*w/2)),y=Math.max(eh/2+4,Math.min(h-eh/2-4,(1-v.y)*h/2));
+          let box={x:x-ew/2,y:y-eh/2,w:ew,h:eh};let overlap=boxes.some(b=>box.x<b.x+b.w+5&&box.x+box.w>b.x-5&&box.y<b.y+b.h+4&&box.y+box.h>b.y-4);
+          if(overlap&&l.priority===0){y=Math.min(h-eh/2-4,y+eh+8);box.y=y-eh/2;overlap=false;}
+          const show=v.z<1&&(!overlap||l.priority===0)&&(w>=430||l.priority<2);
+          l.el.style.visibility=show?'visible':'hidden';l.el.style.left=x+'px';l.el.style.top=y+'px';if(show)boxes.push(box);
+        });
+      }
+      function resize(){const w=host.clientWidth,h=host.clientHeight;if(!w||!h)return;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();render();}
+      function schedule(){if(!state.frame&&state.visible)state.frame=requestAnimationFrame(tick);}
+      function tick(now){
+        state.frame=0;if(!root.isConnected){renderer.dispose();return;}
+        const dt=state.last?Math.min((now-state.last)/1000,.05):0;state.last=now;
+        if(state.transition){const t=state.transition;t.elapsed+=dt;const u=Math.min(1,t.elapsed/.9),f=u*u*(3-2*u);for(const k of ['l','r','edge','cloud','wind','up'])p[k]=t.from[k]+(t.to[k]-t.from[k])*f;applyState();if(u===1)state.transition=null;}
+        if(state.playing){state.time+=dt;state.remaining-=dt;updateMotion();if(state.remaining<=0){state.playing=false;updatePlayButton();}}
+        render();if(state.playing||state.transition)schedule();else state.last=0;
+      }
+      function updatePlayButton(){const b=root.querySelector('[data-action="motion"]');b.textContent=state.playing?'Pausar movimiento':'Ver movimiento · 15 s';b.setAttribute('aria-pressed',String(state.playing));}
+      function setPhase(key){state.phase=key;root.querySelectorAll('[data-phase]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.phase===key)));explain();if(reduced.matches){p={...phases[key]};state.transition=null;applyState();render()}else{state.transition={from:{...p},to:phases[key],elapsed:0};schedule()}}
+      root.querySelectorAll('[data-phase]').forEach(b=>b.addEventListener('click',()=>setPhase(b.dataset.phase)));
+      root.querySelectorAll('[data-topic]').forEach(b=>b.addEventListener('click',()=>{state.topic=b.dataset.topic;explain()}));
+      root.querySelector('[data-view]').addEventListener('change',e=>{
+        const views={perspective:[.33,.43,1,0,-.1],cut:[0,.14,1,0,-.2],top:[0,1.30,1,0,0],east:[-.45,.40,1.28,1.3,-.1]};
+        const v=views[e.target.value];[state.az,state.el,state.zoom]=v;state.focus.set(v[3],v[4],0);render();
+      });
+      root.querySelectorAll('[data-action]').forEach(b=>b.addEventListener('click',()=>{
+        const a=b.dataset.action;
+        if(a==='motion'){state.playing=!state.playing;if(state.playing){state.remaining=15;schedule()}updatePlayButton();}
+        if(a==='left')state.az-=.25;if(a==='right')state.az+=.25;
+        if(a==='in')state.zoom=Math.min(1.8,state.zoom+.12);if(a==='out')state.zoom=Math.max(.65,state.zoom-.12);
+        if(a==='expand'){const expanded=root.dataset.expanded!=='true';root.dataset.expanded=String(expanded);b.textContent=expanded?'Reducir':'Ampliar';b.setAttribute('aria-pressed',String(expanded));resize();}
+        render();
+      }));
+      let pointers=new Map(),dragStart=null,pinch=0;
+      const pinchDistance=()=>{const v=[...pointers.values()];return v.length===2?Math.hypot(v[0].x-v[1].x,v[0].y-v[1].y):0};
+      host.addEventListener('pointerdown',e=>{pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});dragStart={x:e.clientX,y:e.clientY,moved:false};host.setPointerCapture(e.pointerId);pinch=pinchDistance()});
+      host.addEventListener('pointermove',e=>{
+        if(!pointers.has(e.pointerId))return;const prev=pointers.get(e.pointerId);pointers.set(e.pointerId,{x:e.clientX,y:e.clientY});
+        if(pointers.size===2){const d=pinchDistance();if(pinch>0)state.zoom=Math.max(.65,Math.min(1.8,state.zoom*d/pinch));pinch=d;dragStart.moved=true;}
+        else{state.az-=(e.clientX-prev.x)*.007;state.el=Math.max(.10,Math.min(1.35,state.el+(e.clientY-prev.y)*.005));if(Math.hypot(e.clientX-dragStart.x,e.clientY-dragStart.y)>5)dragStart.moved=true;}
+        render();
+      });
+      host.addEventListener('pointerup',e=>{
+        if(dragStart&&!dragStart.moved){const rect=host.getBoundingClientRect(),ray=new T.Raycaster();ray.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),camera);const hit=ray.intersectObjects(pickable,false)[0];if(hit){state.topic=hit.object.userData.topic;explain()}}
+        pointers.delete(e.pointerId);dragStart=pointers.size?{x:e.clientX,y:e.clientY,moved:true}:null;pinch=0;
+      });
+      host.addEventListener('pointercancel',()=>{pointers.clear();dragStart=null;pinch=0});
+      host.addEventListener('wheel',e=>{e.preventDefault();state.zoom=Math.max(.65,Math.min(1.8,state.zoom-e.deltaY*.001));render()},{passive:false});
+      renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();state.playing=false;state.transition=null;const msg=document.createElement('div');msg.className='waiting';msg.setAttribute('role','alert');msg.textContent='Se interrumpió la vista 3D. Vuelve a abrir la maqueta para continuar.';host.append(msg);});
+      const sizeObserver=new ResizeObserver(resize);sizeObserver.observe(host);
+      new IntersectionObserver(entries=>{state.visible=entries[0].isIntersecting;if(state.visible){state.last=0;if(state.playing||state.transition)schedule()}else{cancelAnimationFrame(state.frame);state.frame=0;state.last=0}}).observe(root);
+      let themeTimer;new MutationObserver(()=>{clearTimeout(themeTimer);themeTimer=setTimeout(createScene,50)}).observe(document.documentElement,{attributes:true,attributeFilter:['class','style','data-theme']});
+      matchMedia('(prefers-color-scheme: dark)').addEventListener('change',createScene);
+      reduced.addEventListener('change',()=>{if(reduced.matches){state.playing=false;updatePlayButton();}});
+      createScene();controls.forEach(e=>e.disabled=false);explain();
+    }catch(err){
+      let el=host.querySelector('.waiting');if(!el){el=document.createElement('div');el.className='waiting';host.append(el)}el.setAttribute('role','alert');el.textContent='La escena necesita WebGL y acceso a la biblioteca 3D. No pudo cargarse en este navegador.';
+      // Keep the scientific comparison usable even if graphics are unavailable.
+      const backup={normal:'Normal: alisios hacia el oeste, agua cálida cerca de Asia y ascenso de agua fría al este.',nino:'El Niño: alisios más débiles, calentamiento del Pacífico central y oriental y lluvias desplazadas al este.',nina:'La Niña: alisios más fuertes y mayor enfriamiento del Pacífico central y oriental.'};
+      root.querySelectorAll('[data-phase]').forEach(b=>{b.disabled=false;b.addEventListener('click',()=>{root.querySelectorAll('[data-phase]').forEach(c=>c.setAttribute('aria-pressed',String(c===b)));root.querySelector('.explain').textContent=backup[b.dataset.phase]})});
+    }
+  })();
+  </script>
+</div>
+
+<script src="https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js"></script>
+<script src="https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js"></script>
+<script>
+(() => {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set(["top", "right", "bottom", "left"]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+  let lastPointerWasTouch = false;
+  let pinnedByTouch = false;
+
+  const getTrigger = (target) =>
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest("[data-tooltip]")
+      : null;
+  const containsTarget = (trigger, target) =>
+    target?.nodeType != null && trigger.contains(target);
+  const getContent = (trigger) =>
+    trigger.getAttribute("data-tooltip")?.trim() ?? "";
+  const getPlacement = (trigger) => {
+    const placement = trigger.getAttribute("data-tooltip-placement");
+    return tooltipPlacements.has(placement) ? placement : "top";
+  };
+  const getTooltip = () => {
+    if (tooltip == null) {
+      tooltip = document.createElement("div");
+      tooltip.id = tooltipId;
+      tooltip.className = "tooltip";
+      tooltip.setAttribute("role", "tooltip");
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) => {
+    const ids = new Set(
+      (trigger.getAttribute("aria-describedby") ?? "")
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute("aria-describedby");
+    } else {
+      trigger.setAttribute("aria-describedby", [...ids].join(" "));
+    }
+  };
+  const clearOpenTimeout = () => {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) => {
+    clearOpenTimeout();
+    pinnedByTouch = false;
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) => {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              "--tooltip-available-width",
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              "--tooltip-available-height",
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: "fixed",
+    })
+      .then(({ x, y }) => {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = "visible";
+      })
+      .catch(() => {
+        if (activeTrigger === trigger && request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) => {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = "hidden";
+    floating.style.transform = "translate(0, 0)";
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () => {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) => {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() < skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() => {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) => {
+    if (event.pointerType === "touch") {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handlePointer = (event) => {
+    lastPointerWasTouch =
+      event.type === "pointerdown" && event.pointerType === "touch";
+  };
+  const handleTouchClick = (event) => {
+    const isTouch = event.pointerType === "touch" || lastPointerWasTouch;
+    lastPointerWasTouch = false;
+    if (!isTouch || event.detail === 0) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (
+      trigger == null ||
+      !trigger.isConnected ||
+      getContent(trigger).length === 0 ||
+      (pinnedByTouch && activeTrigger === trigger)
+    ) {
+      if (pinnedByTouch) {
+        closeTooltip();
+      }
+      return;
+    }
+    openTooltip(trigger);
+    pinnedByTouch = activeTrigger === trigger;
+    window.setTimeout(() => {
+      if (activeTrigger === trigger && !trigger.isConnected) {
+        closeTooltip(false);
+      }
+    }, 0);
+  };
+  const handleLeave = (event) => {
+    if (pinnedByTouch) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) => {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(":focus-visible")) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) => {
+    if (event.key === "Escape") {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) => {
+    lastPointerWasTouch = false;
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () => {
+    closeTooltip(false);
+    lastPointerWasTouch = false;
+    document.removeEventListener("pointerover", handlePointerOpen);
+    document.removeEventListener("pointerdown", handlePointer);
+    document.removeEventListener("pointercancel", handlePointer);
+    document.removeEventListener("click", handleTouchClick);
+    document.removeEventListener("pointerout", handleLeave);
+    document.removeEventListener("focusin", handleFocusIn);
+    document.removeEventListener("focusout", handleLeave);
+    document.removeEventListener("keydown", handleKeyDown);
+    document.removeEventListener("contextmenu", handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener("pointerover", handlePointerOpen);
+  document.addEventListener("pointerdown", handlePointer);
+  document.addEventListener("pointercancel", handlePointer);
+  document.addEventListener("click", handleTouchClick);
+  document.addEventListener("pointerout", handleLeave);
+  document.addEventListener("focusin", handleFocusIn);
+  document.addEventListener("focusout", handleLeave);
+  document.addEventListener("keydown", handleKeyDown);
+  document.addEventListener("contextmenu", handleContextMenu);
+  window.addEventListener("pagehide", destroy, { once: true });
+})();
+</script>
+<script id="codex-visualization-tabs">
+(() => {
+  const selector = '.nav[role="tablist"] [role="tab"]';
+  const disabled = ':disabled,[aria-disabled="true"]';
+  const selectTab = (selected) => {
+    const panelId = selected.getAttribute("aria-controls");
+    for (const tab of selected.closest('[role="tablist"]').querySelectorAll('[role="tab"]')) {
+      const active = tab === selected;
+      tab.classList.toggle("active", active);
+      tab.setAttribute("aria-selected", String(active));
+      const id = tab.getAttribute("aria-controls");
+      const panel = id && document.getElementById(id);
+      if (panel != null) {
+        panel.hidden = id !== panelId;
+        if (!panel.hidden && selected.id) {
+          panel.setAttribute("aria-labelledby", selected.id);
+        }
+      }
+    }
+  };
+  const interact = (event) => {
+    const tab = event.target?.closest?.(selector);
+    if (event.defaultPrevented || tab == null || tab.matches(disabled)) {
+      return;
+    }
+    if (event.type === "click") {
+      selectTab(tab);
+      return;
+    }
+    const tabs = Array.from(
+      tab.closest('[role="tablist"]').querySelectorAll('[role="tab"]'),
+    ).filter((candidate) => !candidate.matches(disabled));
+    const current = tabs.indexOf(tab);
+    let next;
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      next = (current + 1) % tabs.length;
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      next = (current + tabs.length - 1) % tabs.length;
+    } else if (event.key === "Home") {
+      next = 0;
+    } else if (event.key === "End") {
+      next = tabs.length - 1;
+    } else {
+      return;
+    }
+    event.preventDefault();
+    tabs[next].focus();
+    selectTab(tabs[next]);
+  };
+
+  for (const list of document.querySelectorAll('.nav[role="tablist"]')) {
+    const selected =
+      list.querySelector('[role="tab"][aria-selected="true"]') ??
+      list.querySelector('[role="tab"].active') ??
+      list.querySelector('[role="tab"]');
+    if (selected != null) {
+      selectTab(selected);
+    }
+  }
+  document.addEventListener("click", interact);
+  document.addEventListener("keydown", interact);
+  window.addEventListener("pagehide", () => {
+    document.removeEventListener("click", interact);
+    document.removeEventListener("keydown", interact);
+  }, { once: true });
+})();
+</script>
+<script id="codex-visualization-lucide" async src="https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js"></script>
+<script>
+(() => {
+  const initialize = () => {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById("codex-visualization-lucide")
+    ?.addEventListener("load", initialize, { once: true });
+})();
+</script>
+
+</body>
+</html>
